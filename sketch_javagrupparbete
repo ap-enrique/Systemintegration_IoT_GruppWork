@@ -1,0 +1,44 @@
+#include <DHT.h>
+
+// DHT11 konfiguration
+#define DHTPIN 3       
+#define DHTTYPE DHT11  // Använd DHT11
+
+// Skapa en DHT-objekt
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+  // Starta seriell kommunikation för att kunna visa resultatet i Serial Monitor
+  Serial.begin(9600);
+  Serial.println("DHT11 Sensor Data Logging");
+
+  // Initiera DHT-sensorn
+  dht.begin();
+}
+
+void loop() {
+  // Vänta 2 sekunder mellan varje mätning
+  delay(2000);
+
+  // Läs temperatur i Celsius
+  float temp = dht.readTemperature();
+  
+  // Läs luftfuktighet i procent
+  float humidity = dht.readHumidity();
+
+  // Kontrollera om avläsningen misslyckades
+  if (isnan(temp) || isnan(humidity)) {
+    Serial.println("Misslyckades med att läsa från DHT-sensorn!");
+    return;
+  }
+
+  // Skriv ut temperatur och luftfuktighet till seriella monitorn
+  Serial.print("Temperatur: ");
+  Serial.print(temp);
+  Serial.println(" °C");
+
+  Serial.print("Luftfuktighet: ");
+  Serial.print(humidity);
+  Serial.println(" %");
+}
+
